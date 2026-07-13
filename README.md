@@ -12,11 +12,11 @@ Folder-backed replication study for [replicateEverything](https://github.com/rep
 
 This repo avoids copying author code when scripts can run unchanged from a Dataverse cache:
 
-1. **`access_deposit`** — downloads files in `manifest/dataverse_files.csv` to `outputs/deposit/`
-2. **`prep_studies`** — runs committed adapters in `code/deposit/` that read `.tab` files directly
-3. **Tables** — thin `code/tables/tab_N.R` wrappers (Rmd chunks without separate author files)
+1. **`access_deposit`** — downloads full Dataverse archive (`format=original`), unzips to `outputs/deposit/`
+2. **`prep_studies`** — `setwd()` on deposit; sources unedited `scripts/recodes_*.R` (expects `data/*.csv`)
+3. **Tables** — thin `code/tables/tab_N.R` wrappers
 
-Dataverse ships `study*.tab` only (metadata: original upload was CSV). Adapters read `.tab` in place — no tab→csv conversion step.
+The manifest lists **expected paths to verify** after unzip — not per-file download ids. Never fetch `.tab` exports when the original archive has CSV and scripts.
 
 ## Run
 

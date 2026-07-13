@@ -53,6 +53,7 @@ dataverse:
   doi: https://doi.org/10.7910/DVN/BZOCDJ
   server: dataverse.harvard.edu
   dataset: "10.7910/DVN/BZOCDJ"
+  fetch: archive_original
   manifest: manifest/dataverse_files.csv
   deposit_root: outputs/deposit
 
@@ -64,8 +65,8 @@ steps:
     type: transform
     label: Access deposit from Dataverse
     description: >
-      Download Harvard Dataverse files listed in manifest/dataverse_files.csv
-      into outputs/deposit/ (author ReadMe, Replication.Rmd, scripts/, data/).
+      Download the full Dataverse deposit as format=original, unzip into
+      outputs/deposit/, then verify paths in manifest/dataverse_files.csv.
     parents: []
     engine: r
     code: code/steps/access_deposit.R
@@ -81,15 +82,15 @@ steps:
     type: transform
     label: Prepare study data
     description: >
-      Run committed adapters in code/deposit/ (from author recodes_s1/s2) on
-      .tab files in outputs/deposit/data/.
+      Source unedited outputs/deposit/scripts/recodes_s1.R and recodes_s2.R
+      with working directory on the deposit root (data/*.csv layout).
     parents:
       - access_deposit
     engine: r
     code: code/steps/prep_studies.R
     inputs:
-      - outputs/deposit/data/study1.tab
-      - outputs/deposit/data/study2.tab
+      - outputs/deposit/data/study1.csv
+      - outputs/deposit/data/study2.csv
     outputs:
       - outputs/prep_studies/studies.rds
 

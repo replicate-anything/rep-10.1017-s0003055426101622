@@ -20,23 +20,21 @@ deposit_root <- function() {
   file.path(study_root(), cfg$deposit_root %||% "outputs/deposit")
 }
 
-download_dataverse_file <- function(file_id, dest, server = "dataverse.harvard.edu") {
-  dest_dir <- dirname(dest)
-  dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
-  url <- sprintf("https://%s/api/access/datafile/%s", server, file_id)
-  resp <- httr::GET(
-    url,
-    httr::write_disk(dest, overwrite = TRUE),
-    httr::add_headers(`User-Agent` = "replicateEverything-dataverse/1.0"),
-    httr::timeout(600)
+download_manifest_file <- function(row, deposit_dir, server = "dataverse.harvard.edu") {
+  replicateEverything:::download_dataverse_manifest_file(
+    row,
+    deposit_dir,
+    server = server
   )
-  if (httr::http_error(resp)) {
-    stop(
-      "Dataverse download failed for file id ", file_id, ": HTTP ",
-      httr::status_code(resp), call. = FALSE
-    )
-  }
-  invisible(dest)
+}
+
+access_deposit_archive <- function(deposit_dir = deposit_root(), cfg = read_dataverse_config()) {
+  replicateEverything:::access_dataverse_deposit_archive(
+    dataset = cfg$dataset,
+    deposit_root = deposit_dir,
+    server = cfg$server %||% "dataverse.harvard.edu",
+    original = TRUE
+  )
 }
 
 inspect_dataverse_formats <- function(dataset = NULL, server = "dataverse.harvard.edu") {
@@ -58,6 +56,11 @@ inspect_dataverse_formats <- function(dataset = NULL, server = "dataverse.harvar
     filename = tabular$filename,
     original = tabular$originalFileName %||% NA_character_,
     format = tabular$originalFormatLabel %||% NA_character_,
+    local_path = ifelse(
+      nzchar(tabular$originalFileName),
+      file.path(dirname(tabular$filename), tabular$originalFileName),
+      tabular$filename
+    ),
     stringsAsFactors = FALSE
   )
 }
@@ -95,6 +98,9 @@ relevel_study_treatments <- function(env) {
   }
   if (exists("wave1_s1", envir = env, inherits = FALSE)) {
     env$wave1_s1$treatment <- safe_relevel(env$wave1_s1$treatment)
+  }
+  if (exists("wave2_s1", envir = env, inherits = FALSE)) {
+    env$wave2_s1$treatment <- safe_relevel(env$wave2_s1$treatment)
   }
   if (exists("wave2_s2_r", envir = env, inherits = FALSE)) {
     env$wave2_s2_r$treatment <- safe_relevel(env$wave2_s2_r$treatment)

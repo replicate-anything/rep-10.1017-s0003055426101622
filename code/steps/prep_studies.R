@@ -1,5 +1,4 @@
-# Build analysis frames from Dataverse .tab files via committed deposit adapters.
-# Author logic: code/deposit/recodes_s*.R (from Dataverse scripts/, .tab paths only).
+# Source unedited author recodes from outputs/deposit/ (expects data/*.csv layout).
 
 source("../helpers/dataverse_deposit.R")
 
@@ -9,13 +8,34 @@ make_prep_studies <- function() {
   if (!dir.exists(file.path(deposit, "data"))) {
     stop("Run access_deposit first (missing ", deposit, "/data).", call. = FALSE)
   }
-  Sys.setenv(VELEZ_DEPOSIT_DIR = deposit)
+  for (req in c(
+    "data/study1.csv",
+    "data/study2.csv",
+    "scripts/recodes_s1.R",
+    "scripts/recodes_s2.R"
+  )) {
+    if (!file.exists(file.path(deposit, req))) {
+      stop("Missing deposit file: ", req, " (re-run access_deposit).", call. = FALSE)
+    }
+  }
 
   env <- new.env(parent = globalenv())
-  deposit_code <- file.path(study_root(), "code", "deposit")
-  source(file.path(deposit_code, "read_study_tab.R"), local = env)
-  source(file.path(deposit_code, "recodes_s1.R"), local = env)
-  source(file.path(deposit_code, "recodes_s2.R"), local = env)
+  env$relevel <- function(x, ref, ...) {
+    if (!is.factor(x)) {
+      x <- as.factor(x)
+    }
+    if (!missing(ref) && ref %in% levels(x)) {
+      stats::relevel(x, ref = ref, ...)
+    } else {
+      x
+    }
+  }
+  owd <- getwd()
+  on.exit(setwd(owd), add = TRUE)
+  setwd(deposit)
+
+  source("scripts/recodes_s1.R", local = env)
+  source("scripts/recodes_s2.R", local = env)
   relevel_study_treatments(env)
 
   out_path <- studies_output_path()

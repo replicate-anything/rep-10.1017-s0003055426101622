@@ -6,10 +6,10 @@ test_that("replication.yml structure", {
   expect_true("tab_1" %in% vapply(yml$steps, `[[`, "", "id"))
 })
 
-test_that("dataverse manifest lists deposit scripts", {
+test_that("dataverse manifest lists expected deposit paths", {
   manifest <- utils::read.csv("manifest/dataverse_files.csv", stringsAsFactors = FALSE)
+  expect_true(any(manifest$path == "data/study1.csv"))
   expect_true(any(manifest$path == "scripts/recodes_s1.R"))
-  expect_true(any(manifest$path == "Replication.Rmd"))
 })
 
 test_that("list_replications includes tab_1", {
