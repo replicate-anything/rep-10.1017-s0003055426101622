@@ -1,0 +1,139 @@
+paper:
+  doi: https://doi.org/10.1017/S0003055426101622
+  article_url: https://doi.org/10.1017/S0003055426101622
+  title: "Beyond Belief Change: The Persuasive Returns of Targeting Attitude-Relevant Beliefs"
+  journal: American Political Science Review
+  year: 2026
+  authors: Yamil Ricardo Velez, Patrick Liu, Scott Clifford
+  dependencies:
+    - dataverse
+    - httr
+    - yaml
+    - rio
+    - magrittr
+    - tidyverse
+    - dplyr
+    - tidyr
+    - stringr
+    - estimatr
+    - modelsummary
+    - gtsummary
+    - broom
+    - forcats
+    - psych
+    - metafor
+    - emmeans
+    - irr
+    - yardstick
+    - jsonlite
+    - ggpubr
+    - quanteda
+    - quanteda.textstats
+    - syuzhet
+    - ggh4x
+    - grid
+    - hrbrthemes
+    - kableExtra
+    - boot
+    - ggridges
+    - ggplot2
+    - xtable
+    - knitr
+
+maintainer:
+  name: Macartan Humphreys
+  email: macartan.humphreys@wzb.eu
+
+collections:
+  - APSR
+
+repo: replicate-anything/rep-10.1017-s0003055426101622
+
+dataverse:
+  doi: https://doi.org/10.7910/DVN/BZOCDJ
+  server: dataverse.harvard.edu
+  dataset: "10.7910/DVN/BZOCDJ"
+  manifest: manifest/dataverse_files.csv
+  deposit_root: outputs/deposit
+
+languages:
+  - r
+
+steps:
+  - id: access_deposit
+    type: transform
+    label: Access deposit from Dataverse
+    description: >
+      Download Harvard Dataverse files listed in manifest/dataverse_files.csv
+      into outputs/deposit/ (author ReadMe, Replication.Rmd, scripts/, data/).
+    parents: []
+    engine: r
+    code: code/steps/access_deposit.R
+    dependencies:
+      - dataverse
+      - httr
+      - yaml
+      - rio
+    outputs:
+      - outputs/deposit/.manifest_applied
+
+  - id: prep_studies
+    type: transform
+    label: Prepare study data
+    description: >
+      Run committed adapters in code/deposit/ (from author recodes_s1/s2) on
+      .tab files in outputs/deposit/data/.
+    parents:
+      - access_deposit
+    engine: r
+    code: code/steps/prep_studies.R
+    inputs:
+      - outputs/deposit/data/study1.tab
+      - outputs/deposit/data/study2.tab
+    outputs:
+      - outputs/prep_studies/studies.rds
+
+  - id: tab_1
+    group: tab_1
+    type: table
+    label: Table 1
+    description: Summary statistics for variables across Studies 1 and 2
+    parents:
+      - prep_studies
+    engine: r
+    code: code/tables/tab_1.R
+    format: code/helpers/format_table.R
+    inputs:
+      - outputs/prep_studies/studies.rds
+    outputs:
+      - outputs/tab_1.html
+    artifact: outputs/tab_1.html
+
+  - id: tab_1_format
+    type: format
+    label: Table 1 format
+    parent: tab_1
+    code: code/helpers/format_table.R
+
+  - id: tab_3
+    group: tab_3
+    type: table
+    label: Table 3
+    description: Effects of interventions on belief relevance (Studies 1 and 2)
+    parents:
+      - prep_studies
+    engine: r
+    code: code/tables/tab_3.R
+    format: code/helpers/format_table.R
+    inputs:
+      - outputs/prep_studies/studies.rds
+    outputs:
+      - outputs/tab_3/tab_3_benchmarks.csv
+      - outputs/tab_3.html
+    artifact: outputs/tab_3.html
+
+  - id: tab_3_format
+    type: format
+    label: Table 3 format
+    parent: tab_3
+    code: code/helpers/format_table.R

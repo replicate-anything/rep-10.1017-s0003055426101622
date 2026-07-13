@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-07-13T16:53:00Z",
+  "folder": "10.1017_s0003055426101622",
+  "doi": "10.1017/s0003055426101622",
+  "prep": [],
+  "replications": {
+    "tab_1": {
+      "status": "error",
+      "message": "Format not supported"
+    }
+  },
+  "study_repo": "replicate-anything/rep-10.1017-s0003055426101622",
+  "study_folder": "rep-10.1017-s0003055426101622"
+}
