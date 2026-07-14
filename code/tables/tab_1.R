@@ -2,10 +2,12 @@
 
 source("../helpers/dataverse_deposit.R")
 
-make_tab_1 <- function() {
+make_tab_1 <- function(data) {
   load_velez_packages()
-  objs <- load_studies_objects()
-  list2env(objs, envir = environment())
+  if (is.null(data)) {
+    data <- load_studies_objects()
+  }
+  list2env(data, envir = environment())
 
   bind_rows(
     wave1_s1 %>%
@@ -35,7 +37,7 @@ make_tab_1 <- function() {
       pivot_longer(
         cols = everything(),
         names_to = c("Variable", "Statistic"),
-        names_sep = "_"
+        names_pattern = "^(.*)_(Mean|SD|SE|Percent_Max)$"
       ) %>%
       group_by(Variable) %>%
       dplyr::summarise(
@@ -75,7 +77,7 @@ make_tab_1 <- function() {
       pivot_longer(
         cols = everything(),
         names_to = c("Variable", "Statistic"),
-        names_sep = "_"
+        names_pattern = "^(.*)_(Mean|SD|SE|Percent_Max)$"
       ) %>%
       group_by(Variable) %>%
       dplyr::summarise(

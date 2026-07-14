@@ -60,10 +60,12 @@ fit_tab_3_models <- function(wave1_s1, wave2_s2_r) {
   )
 }
 
-make_tab_3 <- function() {
+make_tab_3 <- function(data) {
   load_velez_packages()
-  objs <- load_studies_objects()
-  models <- fit_tab_3_models(objs$wave1_s1, objs$wave2_s2_r)
+  if (is.null(data)) {
+    data <- load_studies_objects()
+  }
+  models <- fit_tab_3_models(data$wave1_s1, data$wave2_s2_r)
   benchmarks <- extract_lm_robust_benchmarks(models)
   write_tab_3_benchmarks(benchmarks)
   structure(

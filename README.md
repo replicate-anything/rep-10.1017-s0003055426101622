@@ -12,11 +12,11 @@ Folder-backed replication study for [replicateEverything](https://github.com/rep
 
 This repo avoids copying author code when scripts can run unchanged from a Dataverse cache:
 
-1. **`access_deposit`** — downloads full Dataverse archive (`format=original`), unzips to `outputs/deposit/`
+1. **`access_deposit`** — downloads full Dataverse archive (`format=original`), unzips to `outputs/deposit/`, verifies manifest paths, then **prunes** everything else (PDFs, HTML, study-3 data, etc.)
 2. **`prep_studies`** — `setwd()` on deposit; sources unedited `scripts/recodes_*.R` (expects `data/*.csv`)
 3. **Tables** — thin `code/tables/tab_N.R` wrappers
 
-The manifest lists **expected paths to verify** after unzip — not per-file download ids. Never fetch `.tab` exports when the original archive has CSV and scripts.
+The manifest lists **required paths** for the current phase (`mvp`: five study CSVs + two recode scripts; `meta`: ReadMe and Replication.Rmd for reference). After verify, unlisted files are removed — not per-file download ids. Never fetch `.tab` exports when the original archive has CSV and scripts.
 
 ## Run
 
@@ -38,6 +38,6 @@ Fresh clone: use `given = "nothing"` so `access_deposit` runs before tables.
 
 ## Scope
 
-MVP: **Table 1** only. Main-text Tables 3–5 and Figures 3–7 follow the same pattern (extend manifest + add `tab_N.R` / `fig_N.R` wrappers).
+MVP: **Tables 1 and 3**. Main-text Tables 4–5 and Figures 3–7 follow the same pattern (extend manifest + add `tab_N.R` / `fig_N.R` wrappers).
 
 Author driver on Dataverse: `outputs/deposit/Replication.Rmd` (downloaded, not committed).

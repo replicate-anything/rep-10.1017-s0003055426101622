@@ -1,4 +1,4 @@
-# Fetch Harvard Dataverse deposit — full original-format archive, then unzip.
+# Fetch Harvard Dataverse deposit — full original-format archive, unzip, verify, prune.
 # Paper: 10.1017/S0003055426101622 | Dataverse: 10.7910/DVN/BZOCDJ
 
 source("../helpers/dataverse_deposit.R")
@@ -23,6 +23,7 @@ make_access_deposit <- function(phase = "mvp") {
   manifest <- read_dataverse_manifest(phase = phase)
   expected <- manifest$path
   replicateEverything:::verify_deposit_paths(expected, deposit_dir)
+  replicateEverything:::prune_deposit_paths(expected, deposit_dir)
 
   marker <- file.path(deposit_dir, ".manifest_applied")
   writeLines(

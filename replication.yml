@@ -66,7 +66,7 @@ steps:
     label: Access deposit from Dataverse
     description: >
       Download the full Dataverse deposit as format=original, unzip into
-      outputs/deposit/, then verify paths in manifest/dataverse_files.csv.
+      outputs/deposit/, verify manifest paths, then prune unlisted files.
     parents: []
     engine: r
     code: code/steps/access_deposit.R
@@ -106,6 +106,7 @@ steps:
     format: code/helpers/format_table.R
     inputs:
       - outputs/prep_studies/studies.rds
+    data: outputs/prep_studies/studies.rds
     outputs:
       - outputs/tab_1.html
     artifact: outputs/tab_1.html
@@ -128,6 +129,7 @@ steps:
     format: code/helpers/format_table.R
     inputs:
       - outputs/prep_studies/studies.rds
+    data: outputs/prep_studies/studies.rds
     outputs:
       - outputs/tab_3/tab_3_benchmarks.csv
       - outputs/tab_3.html
