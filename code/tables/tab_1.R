@@ -1,6 +1,10 @@
-# Table 1 — summary statistics (logic from Replication.Rmd chunk; data via deposit recodes)
+# Table 1 — summary statistics
+# Study: https://github.com/replicate-anything/rep-10.1017-s0003055426101622
+#
+# Upstream prep (not re-run here): prep_studies → outputs/prep_studies/studies.rds
+# Live Run / Display assume that prep product already exists (or is built via the DAG).
 
-source("../helpers/dataverse_deposit.R")
+source("../helpers/study_inputs.R")
 
 make_tab_1 <- function(data) {
   load_velez_packages()
@@ -98,3 +102,9 @@ make_tab_1 <- function(data) {
     ) %>%
     as.data.frame()
 }
+
+# Executable replication path: load prep output → make_tab_1() → format_tab_1()
+if (!exists("format_tab_1", mode = "function")) {
+  source("../helpers/format_table.R")
+}
+make_tab_1(readRDS("../outputs/prep_studies/studies.rds")) |> format_tab_1()

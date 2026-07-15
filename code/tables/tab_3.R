@@ -1,6 +1,10 @@
-# Table 3 — effects of interventions on belief relevance (Replication.Rmd chunk)
+# Table 3 — effects of interventions on belief relevance
+# Study: https://github.com/replicate-anything/rep-10.1017-s0003055426101622
+#
+# Upstream prep (not re-run here): prep_studies → outputs/prep_studies/studies.rds
+# Live Run / Display assume that prep product already exists (or is built via the DAG).
 
-source("../helpers/dataverse_deposit.R")
+source("../helpers/study_inputs.R")
 
 TAB_3_COEF_LABELS <- c(
   "treatmentcore_belief" = "Focal counterargument",
@@ -73,3 +77,9 @@ make_tab_3 <- function(data) {
     class = "velez_tab_3"
   )
 }
+
+# Executable replication path: load prep output → make_tab_3() → format_tab_3()
+if (!exists("format_tab_3", mode = "function")) {
+  source("../helpers/format_table.R")
+}
+make_tab_3(readRDS("../outputs/prep_studies/studies.rds")) |> format_tab_3()
