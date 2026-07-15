@@ -4,7 +4,7 @@ paper:
   title: "Beyond Belief Change: The Persuasive Returns of Targeting Attitude-Relevant Beliefs"
   journal: American Political Science Review
   year: 2026
-  authors: Yamil Ricardo Velez, Patrick Liu, Scott Clifford
+  authors: "Velez, Yamil Ricardo, Liu, Patrick, Clifford, Scott"
   dependencies:
     - dataverse
     - httr
