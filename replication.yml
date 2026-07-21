@@ -67,7 +67,6 @@ steps:
     description: >
       Download the full Dataverse deposit as format=original, unzip into
       outputs/deposit/, verify manifest paths, then prune unlisted files.
-    parents: []
     engine: r
     code: code/steps/access_deposit.R
     dependencies:
@@ -112,7 +111,6 @@ steps:
 
   - id: tab_1_format
     type: format
-    label: Table 1 format
     parent: tab_1
     code: code/helpers/format_table.R
 
@@ -135,6 +133,5 @@ steps:
 
   - id: tab_3_format
     type: format
-    label: Table 3 format
     parent: tab_3
     code: code/helpers/format_table.R
