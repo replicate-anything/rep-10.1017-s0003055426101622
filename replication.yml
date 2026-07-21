@@ -109,7 +109,8 @@ steps:
     data: outputs/prep_studies/studies.rds
     outputs:
       - outputs/tab_1.html
-    artifact: outputs/tab_1.html
+    outputs:
+      - outputs/tab_1.html
 
   - id: tab_1_format
     type: format
@@ -133,7 +134,8 @@ steps:
     outputs:
       - outputs/tab_3/tab_3_benchmarks.csv
       - outputs/tab_3.html
-    artifact: outputs/tab_3.html
+    outputs:
+      - outputs/tab_3.html
 
   - id: tab_3_format
     type: format
