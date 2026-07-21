@@ -77,9 +77,3 @@ make_tab_3 <- function(data) {
     class = "velez_tab_3"
   )
 }
-
-# Executable replication path: load prep output → make_tab_3() → format_tab_3()
-if (!exists("format_tab_3", mode = "function")) {
-  source("../helpers/format_table.R")
-}
-make_tab_3(readRDS("../outputs/prep_studies/studies.rds")) |> format_tab_3()

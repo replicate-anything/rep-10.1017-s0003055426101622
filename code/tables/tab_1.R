@@ -102,9 +102,3 @@ make_tab_1 <- function(data) {
     ) %>%
     as.data.frame()
 }
-
-# Executable replication path: load prep output → make_tab_1() → format_tab_1()
-if (!exists("format_tab_1", mode = "function")) {
-  source("../helpers/format_table.R")
-}
-make_tab_1(readRDS("../outputs/prep_studies/studies.rds")) |> format_tab_1()
